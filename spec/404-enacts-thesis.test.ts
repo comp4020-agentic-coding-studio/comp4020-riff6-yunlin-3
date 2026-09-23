@@ -19,4 +19,13 @@ describe("the 404 page enacts the course's own thesis", () => {
     expect(html).toMatch(/what it cost/i);
     expect(html).toMatch(/what it bought/i);
   });
+
+  it("makes the reveal a real decision, not something that arrives for free", () => {
+    // native <details>/<summary>, closed by default --- no `open` attribute,
+    // so the note only reaches the reader who chooses to look under the cut.
+    const details = html.match(/<details class="redaction"[^>]*>/);
+    expect(details, "the cut is not a <details> disclosure").not.toBeNull();
+    expect(details![0]).not.toMatch(/\bopen\b/);
+    expect(html).toMatch(/<summary class="redaction-bar"/);
+  });
 });

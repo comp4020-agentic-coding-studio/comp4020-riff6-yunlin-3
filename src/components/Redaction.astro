@@ -1,18 +1,22 @@
 ---
-// A visible cut, not prose describing one. `note` is the marginal entry that
-// names what was left out and argues the trade --- the same three things the
-// "Commonplace Book of Cuts" assessment asks students to log for every
-// omission they notice in the wild.
+// A cut you have to choose to look under, not prose describing one. `note`
+// is the marginal entry that names what was left out and argues the trade
+// --- the same three things the "Commonplace Book of Cuts" assessment asks
+// students to log for every omission they notice in the wild. Built on
+// native <details>/<summary> so revealing it is a real decision (a click or
+// a keypress), not a hover accident, and it works with no JS at all.
 interface Props {
   note: string;
 }
 const { note } = Astro.props;
 ---
 
-<span class="redaction" role="img" aria-label={`redacted: ${note}`}>
-  <span class="redaction-bar" aria-hidden="true">&nbsp;</span>
-</span>
-<small class="redaction-note">{note}</small>
+<details class="redaction">
+  <summary class="redaction-bar">
+    <span class="visually-hidden">Reveal what was cut here</span>
+  </summary>
+  <small class="redaction-note">{note}</small>
+</details>
 
 <style>
   .redaction {
@@ -25,6 +29,23 @@ const { note } = Astro.props;
     min-width: 9ch;
     background: currentColor;
     border-radius: 0.15em;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .redaction-bar::-webkit-details-marker {
+    display: none;
+  }
+
+  .redaction-bar:hover,
+  .redaction-bar:focus-visible {
+    outline: 2px solid var(--at-color-accent, currentColor);
+    outline-offset: 2px;
+  }
+
+  .redaction[open] .redaction-bar {
+    background: transparent;
+    border: 1px dashed currentColor;
   }
 
   .redaction-note {
@@ -32,5 +53,17 @@ const { note } = Astro.props;
     margin-block-start: 0.35em;
     color: var(--at-color-text-muted, currentColor);
     opacity: 0.75;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 </style>
