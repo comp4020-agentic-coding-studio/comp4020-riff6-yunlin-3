@@ -1,0 +1,36 @@
+---
+// A visible cut, not prose describing one. `note` is the marginal entry that
+// names what was left out and argues the trade --- the same three things the
+// "Commonplace Book of Cuts" assessment asks students to log for every
+// omission they notice in the wild.
+interface Props {
+  note: string;
+}
+const { note } = Astro.props;
+---
+
+<span class="redaction" role="img" aria-label={`redacted: ${note}`}>
+  <span class="redaction-bar" aria-hidden="true">&nbsp;</span>
+</span>
+<small class="redaction-note">{note}</small>
+
+<style>
+  .redaction {
+    display: inline-block;
+    vertical-align: baseline;
+  }
+
+  .redaction-bar {
+    display: inline-block;
+    min-width: 9ch;
+    background: currentColor;
+    border-radius: 0.15em;
+  }
+
+  .redaction-note {
+    display: block;
+    margin-block-start: 0.35em;
+    color: var(--at-color-text-muted, currentColor);
+    opacity: 0.75;
+  }
+</style>
