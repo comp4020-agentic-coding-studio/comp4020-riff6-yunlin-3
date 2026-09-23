@@ -1,0 +1,58 @@
+---
+import { cuts } from "../lib/cuts";
+import { formatCourseDate } from "../lib/dates";
+
+const entries = [...cuts].sort((a, b) => a.noticed.localeCompare(b.noticed));
+---
+
+<ol class="cuts-book" role="list">
+  {
+    entries.map((cut) => (
+      <li class="cut">
+        <h2 class="cut-where">{cut.where}</h2>
+        <p class="cut-date">
+          <small>Noticed {formatCourseDate(cut.noticed)}</small>
+        </p>
+        <dl class="cut-fields">
+          <dt>What's missing</dt>
+          <dd>{cut.missing}</dd>
+          <dt>What it cost</dt>
+          <dd>{cut.cost}</dd>
+          <dt>What it bought</dt>
+          <dd>{cut.bought}</dd>
+        </dl>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .cuts-book {
+    list-style: none;
+    padding-inline-start: 0;
+  }
+
+  .cut {
+    padding-block: 1.5rem;
+    border-block-start: 1px solid currentColor;
+  }
+
+  .cut-where {
+    margin-block-end: 0.15em;
+  }
+
+  .cut-date {
+    margin-block: 0 1em;
+    opacity: 0.7;
+  }
+
+  .cut-fields dt {
+    font-weight: 600;
+    opacity: 0.7;
+  }
+
+  .cut-fields dd {
+    margin-inline-start: 0;
+    margin-block-end: 0.75em;
+  }
+</style>

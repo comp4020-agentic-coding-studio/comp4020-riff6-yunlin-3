@@ -20,6 +20,14 @@ describe("the 404 page enacts the course's own thesis", () => {
     expect(html).toMatch(/what it bought/i);
   });
 
+  // Cutting the inherited hero image also cut the theme's only <h1>, so the
+  // page now carries its heading itself --- a cut should cost what it says
+  // it costs, and not quietly take the page's semantics with it.
+  it("keeps exactly one top-level heading after the hero image was cut", () => {
+    expect(html.match(/<h1[\s>]/g) ?? []).toHaveLength(1);
+    expect(html).not.toMatch(/at-hero-image/);
+  });
+
   it("makes the reveal a real decision, not something that arrives for free", () => {
     // native <details>/<summary>, closed by default --- no `open` attribute,
     // so the note only reaches the reader who chooses to look under the cut.

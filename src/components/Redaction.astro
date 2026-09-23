@@ -1,21 +1,32 @@
 ---
-// A cut you have to choose to look under, not prose describing one. `note`
-// is the marginal entry that names what was left out and argues the trade
-// --- the same three things the "Commonplace Book of Cuts" assessment asks
-// students to log for every omission they notice in the wild. Built on
-// native <details>/<summary> so revealing it is a real decision (a click or
-// a keypress), not a hover accident, and it works with no JS at all.
+// A cut you have to choose to look under. Built on native
+// <details>/<summary> so revealing it is a real decision (a click or a
+// keypress), not a hover accident, and it works with no JS at all.
+//
+// The three fields are not free-form: they are what the "Commonplace Book
+// of Cuts" assessment requires of every entry, so a cut that cannot fill
+// all three has not been thought through yet. `cutById` throws at build
+// time on an id with no logged entry.
+import { cutById } from "../lib/cuts";
+
 interface Props {
-  note: string;
+  id: string;
 }
-const { note } = Astro.props;
+const cut = cutById(Astro.props.id);
 ---
 
 <details class="redaction">
   <summary class="redaction-bar">
     <span class="visually-hidden">Reveal what was cut here</span>
   </summary>
-  <small class="redaction-note">{note}</small>
+  <dl class="redaction-note">
+    <dt>What's missing</dt>
+    <dd>{cut.missing}</dd>
+    <dt>What it cost</dt>
+    <dd>{cut.cost}</dd>
+    <dt>What it bought</dt>
+    <dd>{cut.bought}</dd>
+  </dl>
 </details>
 
 <style>
@@ -49,10 +60,18 @@ const { note } = Astro.props;
   }
 
   .redaction-note {
-    display: block;
-    margin-block-start: 0.35em;
-    color: var(--at-color-text-muted, currentColor);
-    opacity: 0.75;
+    margin-block: 0.5em 0;
+    font-size: 0.9em;
+  }
+
+  .redaction-note dt {
+    font-weight: 600;
+    opacity: 0.7;
+  }
+
+  .redaction-note dd {
+    margin-inline-start: 0;
+    margin-block-end: 0.5em;
   }
 
   .visually-hidden {
